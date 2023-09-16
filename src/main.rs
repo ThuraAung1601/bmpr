@@ -77,7 +77,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             Arg::with_name("blur")
                 .short("b")
                 .long("blur")
-                .help("Apply blur to the image"),
+                .value_name("Sigma")
+                .help("Apply blur to the image")
+                .takes_value(true)
+                .default_value("3.0"),
         )
         .arg(
             Arg::with_name("sharpen")
@@ -142,7 +145,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     if matches.is_present("blur") {
-        manipulated_image = bmpr::apply_blur(&manipulated_image);
+        let sigma = matches.value_of("sigma").unwrap_or("3.0").parse::<f32>()?;
+        manipulated_image = bmpr::apply_blur(&manipulated_image, sigma);
     }
 
     if matches.is_present("sharpen") {
