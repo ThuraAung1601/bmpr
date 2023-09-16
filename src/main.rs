@@ -65,17 +65,45 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .required(false)
                 .takes_value(true),
         )
+        .arg(
+            Arg::with_name("threshold")
+                .short("t")
+                .long("threshold")
+                .value_name("THRESHOLD_VALUE")
+                .help("Threshold value for thresholding")
+                .takes_value(true),
+        )
+        .arg(
+            Arg::with_name("blur")
+                .short("b")
+                .long("blur")
+                .help("Apply blur to the image"),
+        )
+        .arg(
+            Arg::with_name("sharpen")
+                .short("x")
+                .long("sharpen")
+                .help("Apply sharpening to the image"),
+        )
+        .arg(
+            Arg::with_name("noise_reduction")
+                .short("n")
+                .long("noise-reduction")
+                .help("Apply noise reduction to the image"),
+        )
         .get_matches();
 
     let input_file = matches.value_of("input").unwrap();
     let output_file = matches.value_of("output").unwrap();
     
     // Load the input BMP image
-    let mut input_image = image::open(input_file)?;
+    let input_image = image::open(input_file)?;
+
+    let mut manipulated_image = input_image.clone();
 
     if matches.is_present("grayscale") {
         // Apply grayscale
-        input_image = bmpr::apply_grayscale(&mut input_image);
+        manipulated_image = bmpr::apply_grayscale(&mut manipulated_image);
     }
 
     if matches.is_present("print_pixels") {
@@ -95,7 +123,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             let width = values[0].parse::<u32>().expect("Invalid width value");
             let height = values[1].parse::<u32>().expect("Invalid height value");
             // Resizing with specified width and height
-            input_image = bmpr::scale_image(&input_image, width, height);
+            manipulated_image = bmpr::scale_image(&manipulated_image, width, height);
         } else {
             eprintln!("Invalid number of arguments for scale. Use -s <width> <height>");
             std::process::exit(1);
@@ -105,11 +133,28 @@ fn main() -> Result<(), Box<dyn Error>> {
     if let Some(degree) = matches.value_of("rotate") {
         let degree = degree.parse::<f32>().expect("Invalid width value");
         // Rotating image with specified degree
-        input_image = bmpr::rotate_image_degree(&input_image, degree);
+        manipulated_image = bmpr::rotate_image_degree(&manipulated_image, degree);
+    }
+
+    if matches.is_present("threshold") {
+        let threshold_value = matches.value_of("threshold").unwrap_or("128").parse::<u8>()?;
+        manipulated_image = bmpr::threshold(&manipulated_image, threshold_value);
+    }
+
+    if matches.is_present("blur") {
+        manipulated_image = bmpr::apply_blur(&manipulated_image);
+    }
+
+    if matches.is_present("sharpen") {
+        manipulated_image = bmpr::apply_sharpen(&manipulated_image);
+    }
+
+    if matches.is_present("noise_reduction") {
+        manipulated_image = bmpr::apply_noise_reduction(manipulated_image);
     }
 
     // Save the manipulated image
-    input_image
+    manipulated_image
         .save_with_format(output_file, ImageFormat::Bmp)
         .expect("Failed to save manipulated image");
 
