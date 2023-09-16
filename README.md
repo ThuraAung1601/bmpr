@@ -1,5 +1,7 @@
 # bmpr
-CLI-based BMP Image Manipulator
+## CLI-based BMP Image Manipulator
+
+Coursework project for the class "Elementary System Programming" at Software Engineering program, KMITL
 
 ### Usage
 ```{r, engine='bash', count_lines}
