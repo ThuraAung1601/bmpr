@@ -15,7 +15,7 @@ FLAGS:
     -d, --display-dimensions    Display image dimensions
     -g, --grayscale             Apply grayscale
     -h, --help                  Prints help information
-        --noise-reduction       Apply noise reduction to the image
+    -n, --noise-reduction       Apply noise reduction to the image
     -p, --print-pixels          Print pixel values
     -x, --sharpen               Apply sharpening to the image
     -V, --version               Prints version information
