@@ -1,12 +1,5 @@
 use image::{Pixel, imageops, DynamicImage, GenericImageView, ImageBuffer};
 
-#[allow(dead_code)]
-pub struct BmpHeader {
-    width: u32,
-    height: u32,
-    color_depth: u16,
-}
-
 #[allow(irrefutable_let_patterns)]
 pub fn print_pixel_values(image: &DynamicImage) {
     // Get the image dimensions (width and height)
@@ -99,8 +92,8 @@ pub fn threshold(image: &DynamicImage, threshold_value: u8) -> DynamicImage {
     DynamicImage::ImageLuma8(binary_image)
 }
 
-pub fn apply_blur(image: &DynamicImage) -> DynamicImage {
-    image.blur(3.0) // Adjust blur radius as needed
+pub fn apply_blur(image: &DynamicImage, sigma: f32) -> DynamicImage {
+    image.blur(sigma) // Adjust blur radius as needed
 }
 
 pub fn apply_sharpen(image: &DynamicImage) -> DynamicImage {
