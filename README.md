@@ -11,7 +11,6 @@ USAGE:
     bmpr [FLAGS] [OPTIONS] --input <INPUT_FILE> --output <OUTPUT_FILE>
 
 FLAGS:
-    -b, --blur                  Apply blur to the image
     -d, --display-dimensions    Display image dimensions
     -g, --grayscale             Apply grayscale
     -h, --help                  Prints help information
@@ -21,6 +20,7 @@ FLAGS:
     -V, --version               Prints version information
 
 OPTIONS:
+    -b, --blur <Sigma>                   Apply blur to the image [default: 3.0]
     -i, --input <INPUT_FILE>             Input BMP file
     -o, --output <OUTPUT_FILE>           Output BMP file [default: output.bmp]
     -r, --rotate <DEGREE>                Rotate the image to the specified degree
